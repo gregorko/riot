@@ -1,4 +1,4 @@
-libraries = [
+ext.libraries = [
 	jpa: 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.0.Final',
 	jta: 'javax.transaction:jta:1.1',
 	c3p0: 'c3p0:c3p0:0.9.1.2',
@@ -34,7 +34,7 @@ libraries = [
 		  'core', 'expression', 'beans', 'aop', 'context', 'context-support',
 		  'tx', 'jdbc', 'orm', 'oxm', 'web', 'webmvc', 'test');
 
-excludes = [
+ext.excludes = [
 	[group: 'javax.jms'],
 	[group: 'com.sun.jmx'],
 	[group: 'com.sun.jdmk'],
@@ -43,7 +43,7 @@ excludes = [
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
-dependsOnChildren()
+
 
 allprojects {
 	group = 'org.riotfamily'
@@ -105,9 +105,7 @@ subprojects {
 			classifier = 'sources'
 		}
 		artifacts {
-			archives sourceJar {
-				type = 'sources'
-			}
+			archives sourceJar
 		}
 	}
 	
@@ -171,7 +169,7 @@ gradle.taskGraph.whenReady {taskGraph ->
  */
 task wrapper(type: Wrapper) {
 	jarFile = '.gradlew/gradle-wrapper.jar'
-	gradleVersion = '1.0-milestone-8'
+	gradleVersion = '1.4'
 }
 
 // ---------------------------------------------------------------------------
@@ -183,8 +181,8 @@ def isJavaProject(Project project) {
 }
 
 def modules(String key, String pattern, String... names) {
-	libs = [:]
-	template = new groovy.text.GStringTemplateEngine().createTemplate(pattern)
+	def libs = [:]
+	def template = new groovy.text.GStringTemplateEngine().createTemplate(pattern)
 	names.each{ name ->
 		libs[key + '_' + name.replace('-', '_')] = template.make([name: name]).toString()
 	}
@@ -192,7 +190,7 @@ def modules(String key, String pattern, String... names) {
 }
 
 def lib(String name) {
-	dep = libraries[name]
+	def dep = libraries[name]
 	assert dep != null, "No such library: ${name}"
 	dep
 }
